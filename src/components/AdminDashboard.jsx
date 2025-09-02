@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Report from './Report';
 
-function DoctorDashboard({ user }) {
-  const [patients, setPatients] = useState({ total: 0, arrived: 0, notArrived: 0 });
+function AdminDashboard({ user }) {
   const [incomeSummary, setIncomeSummary] = useState({ day: 0, month: 0, year: 0 });
-  const [treatmentHistory, setTreatmentHistory] = useState([]);
-  const [schedule, setSchedule] = useState('');
+  const [users, setUsers] = useState([]);
+  const [patients, setPatients] = useState({ total: 0, arrived: 0, notArrived: 0 });
   const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/doctor/patients?userId=${user.userId}`, {
+        const response = await fetch(`http://localhost:5001/api/admin/patients`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });
@@ -22,19 +21,17 @@ function DoctorDashboard({ user }) {
       } catch (error) {
         console.error('Fetch patients error:', error);
       }
-      // Fetch other data (income, history, etc.)
+      // Fetch other data
     };
     fetchData();
-  }, [user.userId]);
+  }, []);
 
-  const handleAddTreatment = () => {};
-  const handleEditBill = () => {};
-  const handleSetSchedule = () => {};
+  const handleChangeRole = () => {};
 
   return (
-    <div className="container mx-auto p-4 bg-gradient-to-r from-indigo-50 to-blue-50 min-h-screen">
+    <div className="container mx-auto p-4 bg-gradient-to-r from-purple-50 to-pink-50 min-h-screen">
       <nav className="bg-white shadow-md rounded-lg p-4 mb-6 flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-blue-600">Doctor Dashboard</h2>
+        <h2 className="text-3xl font-bold text-purple-600">Admin Dashboard</h2>
         <button
           onClick={() => setShowReport(!showReport)}
           className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
@@ -46,7 +43,7 @@ function DoctorDashboard({ user }) {
       {!showReport && (
         <>
           <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-            <p className="text-lg mb-2">ชื่อ-นามสกุลหมอ: {user.fullName}</p>
+            <p className="text-lg mb-4">รายได้ทั้งหมด: รายวัน {incomeSummary.day}, รายเดือน {incomeSummary.month}, รายปี {incomeSummary.year}</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="bg-gray-100 p-4 rounded">
                 <p className="text-xl font-bold">ยอดทั้งหมด</p>
@@ -85,34 +82,16 @@ function DoctorDashboard({ user }) {
             </table>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">สรุปยอดรายได้หมอ</h3>
-            <p>รายวัน: {incomeSummary.day}</p>
-            <p>รายเดือน: {incomeSummary.month}</p>
-            <p>รายปี: {incomeSummary.year}</p>
-          </div>
-
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">เพิ่มประวัติการรักษา</h3>
-            <button onClick={handleAddTreatment} className="bg-green-500 text-white p-2 rounded hover:bg-green-600">เพิ่มประวัติ</button>
-          </div>
-
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">กรอกค่าใช้จ่าย (วางบิล)</h3>
-            <button onClick={handleEditBill} className="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600">แก้ไขใบเสร็จ</button>
-          </div>
-
           <div className="bg-white shadow-md rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-4 text-blue-600">ลงตารางที่เข้าคลินิก</h3>
-            <input type="text" value={schedule} onChange={(e) => setSchedule(e.target.value)} className="border p-2 w-full mb-2 rounded" />
-            <button onClick={handleSetSchedule} className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">บันทึกตาราง</button>
+            <h3 className="text-2xl font-bold mb-4 text-purple-600">จัดการ Role</h3>
+            <button onClick={handleChangeRole} className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600">เปลี่ยน Role</button>
           </div>
         </>
       )}
 
-      {showReport && <Report userRole="doctor" userId={user.userId} reportType={showReport ? 'appointment' : null} />}
+      {showReport && <Report userRole="admin" userId={user.userId} reportType={showReport ? 'appointment' : null} />}
     </div>
   );
 }
 
-export default DoctorDashboard;
+export default AdminDashboard;
