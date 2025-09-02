@@ -1,0 +1,27 @@
+body {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .bg-blue-50 {
+    background-color: #eff6ff;
+  }
+  
+  .text-blue-600 {
+    color: #2563eb;
+  }
+  
+  .bg-blue-600 {
+    background-color: #2563eb;
+  }
+  
+  .bg-blue-100 {
+    background-color: #dbeafe;
+  }
+  
+  .border-blue-600 {
+    border-color: #2563eb;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
